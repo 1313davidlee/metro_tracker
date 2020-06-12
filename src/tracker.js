@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { getDistance } from 'geolib';
+import LineMap from './linemap.js'
 import axios from 'axios';
+import './App.css';
+
 
 const Tracker = (props) => {
 
@@ -12,6 +15,8 @@ const Tracker = (props) => {
   const [selectedDistance, setSelectedDistance] = useState(0)
   const [updateTime, setUpdateTime] = useState(null)
   const [currentLocation, setCurrentLocation] = useState(null)
+  const [renderLineMap, setRenderLineMap] = useState(false)
+  const [lineMap, setLineMap] = useState(null)
 
   useEffect(() => {
     setStationList(props.stationList)
@@ -112,8 +117,15 @@ const Tracker = (props) => {
     }
   }
 
+  const handleLineClick = (lineKey) => {
+    setRenderLineMap(true)
+    setLineMap(lineKey)
+
+  }
+
   return (
-      <div>
+    <div className='row fillWidth'>
+       <div>
           <div className='row vertical_center'>
           <div className='button largeButtonWidth spacer' onClick={handleNearestStationClick}>Get Nearest Station</div>
           <div className='spacer'>or</div>
@@ -136,19 +148,25 @@ const Tracker = (props) => {
           
           <div className='spaceLeft'>Trains leaving from <b>{selectedStationName}</b> {getSelectedStationDistance()} </div>
           <div className='spaceLeft subtitle'>{(updateTime != null) ? `Last updated at ${updateTime}` : ''}</div>
+          <div className='spaceLeft subtitle'>Click on the line icon to see more details</div>
         </div>}
         <div>
           {(currentTrains.length > 0) ? 
             currentTrains.map((item) => {
               return(
                 <div className='wrapper spacer row vertical_center'>
-                  <div style={{backgroundColor: getCustomColor(item.Line)}} className='spaceRight' id='lineIcon'></div>
+                  <div style={{backgroundColor: getCustomColor(item.Line)}} className='spaceRight cursor' id='lineIcon' onClick={() => handleLineClick(item.Line)}></div>
                   <b>{item.DestinationName}</b> : {getTrainStatus(item.Min)}
                 </div>
               )}): 
               <div className='spacer'>{(selectedStation === null) ? '' : 'No trains found'}</div>}
         </div>
       </div>
+      <div className='extraSpaceLeft fillParent'>
+        {renderLineMap ? <LineMap lineMap={lineMap} currentStation={selectedStation}></LineMap> : ''}
+      </div>    
+    </div>
+
   )
 }
 

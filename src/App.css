@@ -20,6 +20,11 @@
   font-weight: 900;
 }
 
+.medTitle{
+  font-size: 20px;
+  font-weight: 900;
+}
+
 .subtitle{
   font-size: 12px;
   margin-top: 5px;
@@ -27,6 +32,14 @@
 
 .spaceLeft{
   margin-left: 30px;
+}
+
+.extraSpaceLeft{
+  margin-left: 150px
+}
+
+.spaceTop{
+  margin-top: 10px;
 }
 
 .spaceRight{
@@ -93,5 +106,46 @@
   top: 0;
     position: absolute;
     margin-left: 80px;
-    margin-top: 0px;
+    margin-top: 90px;
+}
+
+.cursor{
+  cursor: pointer;
+}
+
+.fillWidth{
+  width: 100vw;
+}
+
+.fillParent{
+  width: 100%;
+}
+
+.centerContent{
+  display: flex;
+  justify-content: center;
+}
+
+
+
+.stopIcon{
+  width: 25px;
+  height: 25px;
+  border-radius: 100%;
+  background-color: lightslategrey;
+  margin-bottom: 1px;
+}
+
+.stopIconBorder{
+  width: 35px;
+  height: 35px;
+  border-radius: 100%;
+  border: 2px solid gray;
+}
+
+.stopLine{
+  height: 30px;
+  width: 1px;
+  background-color: gray;
+  margin-left: 17.5px;
 }
