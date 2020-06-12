@@ -20,7 +20,6 @@ const Route = (props) => {
     const [endLocationName, setEndLocationName] = useState(null)
     const [startLocationName, setStartLocationName] = useState(null)
 
-    
     useEffect(() => {
         setStationList(props.stationList)
       }, [props.stationList])
