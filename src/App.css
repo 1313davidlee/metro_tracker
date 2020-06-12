@@ -2,7 +2,6 @@
 }
 
 .wrapper{
-  /*box-shadow: 0px 0px 15px -5px rgba(183, 183, 183, 0.66);*/
   padding: 20px;
   border: 1px solid gainsboro;
   margin: 15px;
@@ -93,5 +92,5 @@
   top: 0;
     position: absolute;
     margin-left: 80px;
-    margin-top: 0px;
+    margin-top: 90px;
 }
