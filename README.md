@@ -2,22 +2,18 @@
 
 ## Description
 
-In the DC area, our subway system is called “the Metro” and is run by Washington Metro Area Transit Authority or WMATA for short.
+This application facilitates Metro train tracking and route planning using the WMATA API.
 
-Today, we’re going to be building a project similar to something we had on screens in the WaPo office where you could see the next trains coming for a given station (the WaPo one defaulted to the closest to the office), what the expected arrival times were for each train and which direction that train was going.
+## API Access
 
-How do you get that info? Great question, I’m glad you asked!
-
-You will have to sign up for a free account at https://developer.wmata.com/
-
-Once you create an API key, you’ll need to access the APIs (particularly the Rail Station Info and Predictions ones). Note that you can play around with these api responses to see the structure of the data on the wmata site (for example, you can see the rail stations here).
+All of the APIs used in this project come from https://developer.wmata.com/ and can be accessed with a free api key.
 
 ## Installation
 
 0. Make sure you have node & npm installed! You will also need yarn (run `yarn -v` to check for it. If you don't have it, run `npm i yarn -g`)
-1. From the root of your project run `yarn`
+1. From the root of the project run `yarn` to install dependencies
 2. To start up your app in dev mode, run `yarn start`
-3. Give yourself a high five - you did it! 🎉
+3. View the project in localhost:3000
 
 ## CRA Info
 
@@ -60,32 +56,3 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
