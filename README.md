@@ -1,6 +1,6 @@
 # Metro App
 
-## Desccription
+## Description
 
 In the DC area, our subway system is called “the Metro” and is run by Washington Metro Area Transit Authority or WMATA for short.
 
