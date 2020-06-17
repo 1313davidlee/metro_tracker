@@ -8,6 +8,9 @@ const LineMap = props => {
     const [lineName, setLineName] = useState(null)
     const [lineRoute, setLineRoute] = useState([])
     const [currentStation, setCurrentStation] = useState(null)
+    const [incidentList, setIncidentList] = useState([])
+    const [finalIncidentList, setFinalIncidentList] = useState([])
+
 
     useEffect(() => {
         if(props.lineMap){
@@ -16,7 +19,6 @@ const LineMap = props => {
                 var lineArray = data.data.Lines
                 lineArray.map((line) => {
                     if (line.LineCode === props.lineMap){
-                        console.log("this is line data", line)
                         setLineName(line.DisplayName)
                         setLineData(line)
                     
@@ -31,6 +33,13 @@ const LineMap = props => {
             setCurrentStation(props.currentStation)
         }
     }, [props.currentStation])
+
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_INCIDENT_API}?api_key=${process.env.REACT_APP_SECRET}`)
+         .then((data) => {
+           setIncidentList(data.data.Incidents)
+         })
+      }, [])
 
 
     useEffect(() => {
@@ -63,11 +72,44 @@ const LineMap = props => {
         }
       }
 
-    return(
+
+    useEffect(() => {
+        if (props.lineMap && incidentList){
+            const incidentArray = []
+            var line = props.lineMap
+            incidentList.map((incident) => {
+                if(incident.LinesAffected.includes(line)){
+                    if (!incidentArray.includes(incident.Description)){
+                        console.log('mango')
+
+                        incidentArray.push(incident.Description)
+                    }
+                }
+            })
+            setFinalIncidentList(incidentArray)
+        }
+    }, [incidentList, props.lineMap])
+
+   
+
+    
+
+    return( 
         <div >
-            <div className='double_bottom_space'><b>Map of the {lineName} line</b></div>
+            <div className='row'>
+                <div className='double_bottom_space'><b>Map of the {lineName} line</b></div>
+            </div>
+            <div>
+                <b>Incidents on this line:</b>
+                {finalIncidentList.length && finalIncidentList.map((incident) => {
+                    return(
+                        <div className='spaceTop incident spaceBottom'>{incident}</div>
+                    )
+                })}
+                <div>
+                </div>
+            </div>
             {lineRoute.length && lineRoute.map((stop, i) => {
-                console.log("this is a stop", stop)
                 return(
                     <div>
                         <div className='row vertical_align'>
@@ -86,6 +128,10 @@ const LineMap = props => {
             })}
 
         </div>
+
+        
+        
+
         
         
 

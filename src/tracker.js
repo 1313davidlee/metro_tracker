@@ -26,8 +26,8 @@ const Tracker = (props) => {
   }, [props.stationList])
 
   useEffect(() => {
-    setTimeout(setCurrentLocation(props.currentLocation)
-    , 4000);
+    setCurrentLocation(props.currentLocation)
+  
 
   }, [props.currentLocation])
 
@@ -46,6 +46,7 @@ const Tracker = (props) => {
     }
   }, [loading])
 
+
   useEffect(() => {
     const interval = setInterval(() => {
       getTrainData(selectedStation)
@@ -58,6 +59,7 @@ const Tracker = (props) => {
 
     if (loading){
       setShowLoader(true)
+
     }
     else{
       var minDistance = Infinity
@@ -86,16 +88,27 @@ const Tracker = (props) => {
 
   }
 
-  const handleStationSelect = (event) => {stationList.map((station) => {
-    if (station.Code === event.target.value){
-      setSelectedStationName(station.Name)
-      setSelectedDistance(getDistance({currentLocation}.currentLocation, 
-                                        {latitude: station.Lat,
-                                        longitude: station.Lon}) * 0.000621371)
+  const handleStationSelect = (event) => {
+    if(!currentLocation){
+      setShowLoader(true)
+      setTimeout(handleStationSelect(event)
+      , 10000);
+
     }
-  })
-    setSelectedStation(event.target.value)
-    getTrainData(event.target.value)
+    else{
+      setShowLoader(false)
+      stationList.map((station) => {
+      
+        if (station.Code === event.target.value){
+          setSelectedStationName(station.Name)
+          setSelectedDistance(getDistance({currentLocation}.currentLocation, 
+                                            {latitude: station.Lat,
+                                            longitude: station.Lon}) * 0.000621371)
+        }
+      })
+        setSelectedStation(event.target.value)
+        getTrainData(event.target.value)
+    } 
   }
 
   function getTrainStatus(min){
@@ -191,7 +204,7 @@ const Tracker = (props) => {
           : ''}
 
         {selectedStationName && 
-        <div >
+        <div>
           
           <div className='spaceLeft'>Trains leaving from <b>{selectedStationName}</b> {getSelectedStationDistance()} </div>
           <div className='spaceLeft subtitle'>{(updateTime != null) ? `Last updated at ${updateTime}` : ''}</div>
@@ -210,7 +223,8 @@ const Tracker = (props) => {
         </div>
       </div>
       <div className='extraSpaceLeft fillParent'>
-        {renderLineMap ? <LineMap lineMap={lineMap} currentStation={selectedStation}></LineMap> : ''}
+        {renderLineMap ? 
+        <LineMap lineMap={lineMap} currentStation={selectedStation}></LineMap> : ''}
       </div>    
     </div>
 
