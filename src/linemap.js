@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './App.css';
 
@@ -16,8 +16,10 @@ const LineMap = props => {
                 var lineArray = data.data.Lines
                 lineArray.map((line) => {
                     if (line.LineCode === props.lineMap){
+                        console.log("this is line data", line)
                         setLineName(line.DisplayName)
                         setLineData(line)
+                    
                     }  
                 })
             })
@@ -51,7 +53,7 @@ const LineMap = props => {
           case 'BL':
             return '#8fc1ff'
           case 'OR':
-            return '#8fc1ff'
+            return '#ff9900'
           case 'GR':
             return '#abd1af'
           case 'SV':
@@ -65,6 +67,7 @@ const LineMap = props => {
         <div >
             <div className='double_bottom_space'><b>Map of the {lineName} line</b></div>
             {lineRoute.length && lineRoute.map((stop, i) => {
+                console.log("this is a stop", stop)
                 return(
                     <div>
                         <div className='row vertical_align'>

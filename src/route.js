@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getDistance } from 'geolib';
 import axios from 'axios';
 import './App.css';
@@ -48,7 +48,6 @@ const Route = (props) => {
     }, [startStation, endStation])
 
     useEffect(() => {
-        console.log('blallal')
         if (startLocation && endLocation){
             console.log('calling handledestenter')
             handleDestinationEnter()
@@ -69,7 +68,7 @@ const Route = (props) => {
     }, [startStation])
     
 
-    const handleDestinationEnter = () => {
+    function handleDestinationEnter(){
         var starter = findNearestStation(startLocation)
         var startDelta = starter[0]
         var startStation = starter[1]
@@ -102,7 +101,7 @@ const Route = (props) => {
     }
 
     function generateResponse() {
-        if (showResponse && currentRoute[0] && Object.keys(stationNames).length != 0){
+        if (showResponse && currentRoute[0] && Object.keys(stationNames).length !== 0){
             var start = stationNames[startStation]
             var end = stationNames[endStation]
 
@@ -146,22 +145,29 @@ const Route = (props) => {
           case 'BL':
             return '#8fc1ff'
           case 'OR':
-            return '#8fc1ff'
+            return '#ff9900'
           case 'GR':
             return '#abd1af'
           case 'SV':
             return '#c2c2c2'
           case 'YL':
             return '#ffe999'
+          case 'No':
+            return 'gray'
+          default:
+            return 'gray'
         }
       }
 
       function getTrainStatus(min){
         if (min === 'BRD'){
-          return <b> BOARDING NOW</b>
+          return <b>&nbsp;BOARDING NOW</b>
         }
         else if (min === 'ARR'){
-          return <b> ARRIVING NOW</b>
+          return <b>&nbsp;ARRIVING NOW</b>
+        }
+        else if (min === '---'){
+          return `N/A`
         }
         else{
           return `${min} minute${(min > 1) ? 's' : ''} away`

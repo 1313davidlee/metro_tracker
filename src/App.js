@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createContext, useReducer } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Route from './route.js'
 import Tracker from './tracker.js'
@@ -10,6 +10,10 @@ const App = () => {
   const [stationList, setStationList] = useState([])
   const [currentLocation, setCurrentLocation] = useState(null)
   const [stationNames, setStationNames] = useState({})
+
+  useEffect(() => {
+    document.getElementById('track').checked = true
+  }, [])
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_RAIL_INFO_API}/jStations?api_key=${process.env.REACT_APP_SECRET}`)
@@ -36,7 +40,6 @@ const App = () => {
 
 
   const handleViewToggle = () => {
-    console.log('here')
     if(document.getElementById('track').checked){
       setView('track')
     }
@@ -69,7 +72,7 @@ const App = () => {
   return (
     <div className="App row">
       <div className=''>
-        <div className='spacer title noBottom'>WMATA Live Train Tracker</div>
+        <div className='spacer title noBottom'>WMATA Live Train Tracker and Planner</div>
         <div className='spacer column noBottom'>
           <div className='bottom_space'>
             <input type="radio" id="track" name="view" value="track" onClick={handleViewToggle}></input>

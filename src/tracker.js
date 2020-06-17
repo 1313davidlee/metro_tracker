@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getDistance } from 'geolib';
 import LineMap from './linemap.js'
 import axios from 'axios';
+import FadeLoader from "react-spinners/FadeLoader";
 import './App.css';
 
 
@@ -17,14 +18,33 @@ const Tracker = (props) => {
   const [currentLocation, setCurrentLocation] = useState(null)
   const [renderLineMap, setRenderLineMap] = useState(false)
   const [lineMap, setLineMap] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [showLoader, setShowLoader] = useState(false)
 
   useEffect(() => {
     setStationList(props.stationList)
   }, [props.stationList])
 
   useEffect(() => {
-    setCurrentLocation(props.currentLocation)
+    setTimeout(setCurrentLocation(props.currentLocation)
+    , 4000);
+
   }, [props.currentLocation])
+
+  useEffect(() => {
+    if(currentLocation !== null && stationList.length){
+      setLoading(false)
+    }
+  }, [currentLocation, stationList])
+
+  useEffect(() => {
+    if (!loading){
+      if(showLoader){
+        setShowLoader(false)
+        handleNearestStationClick()
+      }
+    }
+  }, [loading])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -33,28 +53,37 @@ const Tracker = (props) => {
     return () => clearInterval(interval);
   }, [selectedStation]);
 
-  const handleNearestStationClick = () => {
-    var minDistance = Infinity
-    var closestStation = null
-    var closestStationName = null
 
-    stationList.map((station) =>{
-        var currDistance = getDistance({currentLocation}.currentLocation, {
-          latitude: station.Lat,
-          longitude: station.Lon
-        })
-                    
-        if (currDistance < minDistance){
-          minDistance = currDistance
-          closestStation = station.Code
-          closestStationName = station.Name
-        }
-    })
-    document.getElementById('stationSelect').value=closestStation
-    setSelectedStation(closestStation)
-    getTrainData(closestStation)
-    setSelectedStationName(closestStationName)
-    setSelectedDistance(minDistance * 0.000621371)
+  const handleNearestStationClick = () => {
+
+    if (loading){
+      setShowLoader(true)
+    }
+    else{
+      var minDistance = Infinity
+      var closestStation = null
+      var closestStationName = null
+  
+      stationList.map((station) =>{
+          var currDistance = getDistance({currentLocation}.currentLocation, {
+            latitude: station.Lat,
+            longitude: station.Lon
+          })
+                      
+          if (currDistance < minDistance){
+            minDistance = currDistance
+            closestStation = station.Code
+            closestStationName = station.Name
+          }
+      })
+      document.getElementById('stationSelect').value=closestStation
+      setSelectedStation(closestStation)
+      getTrainData(closestStation)
+      setSelectedStationName(closestStationName)
+      setSelectedDistance(minDistance * 0.000621371)
+    }
+
+
   }
 
   const handleStationSelect = (event) => {stationList.map((station) => {
@@ -71,14 +100,18 @@ const Tracker = (props) => {
 
   function getTrainStatus(min){
     if (min === 'BRD'){
-      return <b> BOARDING NOW</b>
+      return <b>&nbsp;BOARDING NOW</b>
     }
     else if (min === 'ARR'){
-      return <b> ARRIVING NOW</b>
+      return <b>&nbsp;ARRIVING NOW</b>
+    }
+    else if (min === '---'){
+      return `N/A`
     }
     else{
       return `${min} minute${(min > 1) ? 's' : ''} away`
     }
+
   }
 
   function getCustomColor(line) {
@@ -88,13 +121,17 @@ const Tracker = (props) => {
       case 'BL':
         return '#8fc1ff'
       case 'OR':
-        return '#8fc1ff'
+        return '#ff9900'
       case 'GR':
         return '#abd1af'
       case 'SV':
         return '#c2c2c2'
       case 'YL':
         return '#ffe999'
+      case 'No':
+        return 'gray'
+      default:
+        return 'gray'
     }
   }
 
@@ -108,7 +145,6 @@ const Tracker = (props) => {
           setUpdateTime(new Date().toLocaleTimeString())
         })
     }
-    
   }
 
   function getSelectedStationDistance() {
@@ -119,8 +155,8 @@ const Tracker = (props) => {
 
   const handleLineClick = (lineKey) => {
     setRenderLineMap(true)
+    console.log('this is the line key', lineKey)
     setLineMap(lineKey)
-
   }
 
   return (
@@ -135,13 +171,24 @@ const Tracker = (props) => {
           
             {stationList.length && (
             <select name='stations' id='stationSelect' onChange={handleStationSelect}>
-              <option selected disabled hidden style={{display: 'none'}} value=''></option>
+              <option defaultValue='' style={{display: 'none'}} value=''></option>
               {stationList.map((item) => {
                 return(<option key={item.Code} value={item.Code}>{item.Name}</option>)
               })}
             </select> )}
           </div>
         </div>
+
+        {showLoader ? 
+          <div className='spaceLeft'>
+            <FadeLoader
+              size={50}
+              color={"gray"}
+              loading={loading}
+            />
+          </div>
+
+          : ''}
 
         {selectedStationName && 
         <div >
