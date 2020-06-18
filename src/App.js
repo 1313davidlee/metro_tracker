@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Route from './route.js'
 import Tracker from './tracker.js'
+import PositionMap from './positions.js'
 import './App.css';
 
 const App = () => {
@@ -43,9 +44,13 @@ const App = () => {
     if(document.getElementById('track').checked){
       setView('track')
     }
-    else{
+    else if (document.getElementById('plan').checked){
       setView('plan')
     }
+    else{
+      setView('loc')
+    }
+    
   }
 
  
@@ -54,6 +59,11 @@ const App = () => {
       return(
         <Tracker stationList={stationList} currentLocation={currentLocation}></Tracker>
 
+      )
+    }
+    else if( view=== 'loc'){
+      return(
+        <PositionMap lineMap={'BL'}></PositionMap>
       )
     }
     else{
@@ -81,6 +91,10 @@ const App = () => {
           <div className='bottom_space'>
             <input  className='space_right' type="radio" id="plan" name="view" value="plan" onClick={handleViewToggle}></input>
             <label className='space_left' htmlFor='plan'>Trip Planner </label>
+          </div>
+          <div className='bottom_space'>
+            <input  className='space_right' type="radio" id="locs" name="view" value="locs" onClick={handleViewToggle}></input>
+            <label className='space_left' htmlFor='locs'>Train Locations</label>
           </div>
         </div>
         {renderMainBody()}   

@@ -7,9 +7,13 @@ const LineMap = props => {
     const [lineData, setLineData] = useState(null)
     const [lineName, setLineName] = useState(null)
     const [lineRoute, setLineRoute] = useState([])
-    const [currentStation, setCurrentStation] = useState(null)
     const [incidentList, setIncidentList] = useState([])
     const [finalIncidentList, setFinalIncidentList] = useState([])
+
+    useEffect(() =>{
+        document.getElementById("lineMapParent").style.display = 'inherit'
+
+    })
 
 
     useEffect(() => {
@@ -28,11 +32,7 @@ const LineMap = props => {
         }
     }, [props.lineMap])
 
-    useEffect(()=>{
-        if(props.currentStation){
-            setCurrentStation(props.currentStation)
-        }
-    }, [props.currentStation])
+
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_INCIDENT_API}?api_key=${process.env.REACT_APP_SECRET}`)
@@ -90,12 +90,14 @@ const LineMap = props => {
         }
     }, [incidentList, props.lineMap])
 
+    
+
    
 
     
 
     return( 
-        <div >
+        <div id='lineMapParent'>
             <div className='row'>
                 <div className='double_bottom_space'><b>Map of the {lineName} line</b></div>
             </div>
@@ -116,11 +118,11 @@ const LineMap = props => {
                             <div className='stopIconBorder centerContent vertical_center'>
                                 <div style={{backgroundColor: getCustomColor(stop.LineCode)}} className='stopIcon'></div>
                             </div>
-                            { currentStation && currentStation === stop.StationCode ? 
-                                <div className='spaceLeft medTitle spaceTop'><b>{stop.StationName}</b></div>:
+
                                 <div className='spaceLeft  spaceTop'>{stop.StationName}</div>
-                            }       
+                             
                         </div>
+
                         {i === lineRoute.length - 1 ? <div className='spacer'></div> : <div className='stopLine'></div>}
                     </div>
 

@@ -20,6 +20,7 @@ const Tracker = (props) => {
   const [lineMap, setLineMap] = useState(null)
   const [loading, setLoading] = useState(true)
   const [showLoader, setShowLoader] = useState(false)
+  const [targetValue, setTargetValue] = useState(null)
 
   useEffect(() => {
     setStationList(props.stationList)
@@ -27,8 +28,6 @@ const Tracker = (props) => {
 
   useEffect(() => {
     setCurrentLocation(props.currentLocation)
-  
-
   }, [props.currentLocation])
 
   useEffect(() => {
@@ -39,7 +38,11 @@ const Tracker = (props) => {
 
   useEffect(() => {
     if (!loading){
-      if(showLoader){
+      if (targetValue){
+        setShowLoader(false)
+        handleStationSelect(targetValue)
+      }
+      else if(showLoader){
         setShowLoader(false)
         handleNearestStationClick()
       }
@@ -89,11 +92,10 @@ const Tracker = (props) => {
   }
 
   const handleStationSelect = (event) => {
-    if(!currentLocation){
-      setShowLoader(true)
-      setTimeout(handleStationSelect(event)
-      , 10000);
 
+    if(loading){
+      setShowLoader(true)
+      setTargetValue(event)
     }
     else{
       setShowLoader(false)
@@ -172,6 +174,10 @@ const Tracker = (props) => {
     setLineMap(lineKey)
   }
 
+  const handleMapClose = () => {
+    setRenderLineMap(false)
+}
+
   return (
     <div className='row fillWidth'>
        <div>
@@ -223,8 +229,13 @@ const Tracker = (props) => {
         </div>
       </div>
       <div className='extraSpaceLeft fillParent'>
+
         {renderLineMap ? 
-        <LineMap lineMap={lineMap} currentStation={selectedStation}></LineMap> : ''}
+        <div>
+        <div className='cursor closeX extraExtraSpaceLeft' onClick={handleMapClose}><b>X</b></div>
+
+        <LineMap lineMap={lineMap} currentStation={selectedStation}></LineMap>
+        </div> : ''}
       </div>    
     </div>
 
